@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/app/modules/natal/controllers/natal_controller.dart';
-import 'package:myapp/widget/custom_navbar.dart';
 
 class NatalView extends GetView<NatalController> {
   const NatalView({super.key});

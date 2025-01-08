@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:myapp/app/modules/auth/controllers/auth_controller.dart';
 import 'package:myapp/widget/custom_navbar.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
-
+  HomeView({super.key});
+  final AuthController _authController = Get.put(AuthController());
   @override
   _HomeViewState createState() => _HomeViewState();
 }
@@ -172,6 +173,67 @@ class _HomeViewState extends State<HomeView> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
             ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            //   child: Wrap(
+            //     spacing: 10,
+            //     runSpacing: 10,
+            //     children: [
+            //       {
+            //         'label': 'Bubur',
+            //         'icon': Icons.rice_bowl,
+            //         'color': Colors.orange
+            //       },
+            //       {
+            //         'label': 'Mie Godog',
+            //         'icon': Icons.restaurant,
+            //         'color': Colors.red
+            //       },
+            //       {
+            //         'label': 'Mie Goreng',
+            //         'icon': Icons.fastfood,
+            //         'color': Colors.blue
+            //       },
+            //       {
+            //         'label': 'Minuman Dingin',
+            //         'icon': Icons.icecream,
+            //         'color': Colors.lightBlueAccent
+            //       },
+            //       {
+            //         'label': 'Minuman Panas',
+            //         'icon': Icons.coffee,
+            //         'color': Colors.brown
+            //       },
+            //     ].map((category) {
+            //       return SizedBox(
+            //         width: MediaQuery.of(context).size.width / 3.5,
+            //         child: Column(
+            //           mainAxisSize: MainAxisSize.min,
+            //           children: [
+            //             Container(
+            //               width: 60,
+            //               height: 60,
+            //               decoration: const BoxDecoration(
+            //                 color: Colors.green,
+            //                 shape: BoxShape.circle,
+            //               ),
+            //               child: Icon(
+            //                 category['icon'] as IconData,
+            //                 color: Colors.white,
+            //               ),
+            //             ),
+            //             const SizedBox(height: 5),
+            //             Text(
+            //               category['label'] as String,
+            //               style: const TextStyle(fontSize: 12),
+            //               textAlign: TextAlign.center,
+            //             ),
+            //           ],
+            //         ),
+            //       );
+            //     }).toList(),
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Wrap(
@@ -181,27 +243,32 @@ class _HomeViewState extends State<HomeView> {
                   {
                     'label': 'Bubur',
                     'icon': Icons.rice_bowl,
-                    'color': Colors.orange
+                    'color': const Color.fromARGB(255, 35, 142, 89)
                   },
                   {
                     'label': 'Mie Godog',
                     'icon': Icons.restaurant,
-                    'color': Colors.red
+                    'color': const Color.fromARGB(255, 35, 142, 89)
                   },
                   {
                     'label': 'Mie Goreng',
                     'icon': Icons.fastfood,
-                    'color': Colors.blue
+                    'color': const Color.fromARGB(255, 35, 142, 89)
                   },
                   {
                     'label': 'Minuman Dingin',
                     'icon': Icons.icecream,
-                    'color': Colors.lightBlueAccent
+                    'color': const Color.fromARGB(255, 35, 142, 89)
                   },
                   {
                     'label': 'Minuman Panas',
                     'icon': Icons.coffee,
-                    'color': Colors.brown
+                    'color': const Color.fromARGB(255, 35, 142, 89)
+                  },
+                  {
+                    'label': 'Lihat Lebih',
+                    'icon': Icons.restaurant_menu,
+                    'color': const Color.fromARGB(255, 35, 142, 89)
                   },
                 ].map((category) {
                   return SizedBox(
@@ -209,16 +276,28 @@ class _HomeViewState extends State<HomeView> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Container(
-                          width: 60,
-                          height: 60,
-                          decoration: const BoxDecoration(
-                            color: Colors.green,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            category['icon'] as IconData,
-                            color: Colors.white,
+                        GestureDetector(
+                          onTap: () {
+                            // Kondisi untuk kategori 'Bubur' navigasi ke /mbubur
+                            if (category['label'] == 'Bubur') {
+                              Get.toNamed('/mbubur');
+                            } else {
+                              // Navigasi ke MenuMakananView untuk kategori lainnya
+                              Get.toNamed('/menumakanan',
+                                  arguments: {'category': category['label']});
+                            }
+                          },
+                          child: Container(
+                            width: 60,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              color: category['color'] as Color,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              category['icon'] as IconData,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 5),

@@ -8,6 +8,10 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/keranjang/bindings/keranjang_binding.dart';
 import '../modules/keranjang/views/keranjang_view.dart';
+import '../modules/mbubur/bindings/mbubur_binding.dart';
+import '../modules/mbubur/views/mbubur_view.dart';
+import '../modules/menumakanan/bindings/menumakanan_binding.dart';
+import '../modules/menumakanan/views/menumakanan_view.dart';
 import '../modules/natal/bindings/natal_binding.dart';
 import '../modules/natal/views/natal_view.dart';
 import '../modules/newyear/bindings/newyear_binding.dart';
@@ -24,12 +28,12 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.AUTH;
+  static const INITIAL = Routes.HOME;
 
   static final routes = [
     GetPage(
       name: _Paths.HOME,
-      page: () => const HomeView(),
+      page: () => HomeView(),
       binding: HomeBinding(),
     ),
     GetPage(
@@ -68,9 +72,14 @@ class AppPages {
       binding: RegisterBinding(),
     ),
     GetPage(
-      name: _Paths.KERANJANG,
-      page: () => const KeranjangView(),
-      binding: KeranjangBinding(),
+      name: _Paths.MENUMAKANAN,
+      page: () => const MenumakananView(),
+      binding: MenumakananBinding(),
+    ),
+    GetPage(
+      name: _Paths.MBUBUR,
+      page: () => const MbuburView(),
+      binding: MbuburBinding(),
     ),
   ];
 }
