@@ -8,6 +8,34 @@ class NewyearView extends GetView<NewyearController> {
 
   @override
   Widget build(BuildContext context) {
+    // Daftar data dinamis untuk GridView
+    final List<Map<String, dynamic>> items = [
+      {
+        'image': 'assets/images/produk.png', // Local image path
+        'brand': 'Brand A',
+        'name': 'Red Shirt',
+        'price': 'Discon \$25',
+      },
+      {
+        'image': 'assets/images/produk.png', // Local image path
+        'brand': 'Brand B',
+        'name': 'Green Blouse',
+        'price': 'Discon \$30',
+      },
+      {
+        'image': 'assets/images/produk.png', // Local image path
+        'brand': 'Brand C',
+        'name': 'Blue Jacket',
+        'price': 'Discon \$50',
+      },
+      {
+        'image': 'assets/images/produk.png', // Local image path
+        'brand': 'Brand D',
+        'name': 'Yellow Skirt',
+        'price': 'Discon \$40',
+      },
+    ];
+
     // Mendapatkan ukuran layar
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -18,13 +46,10 @@ class NewyearView extends GetView<NewyearController> {
       appBar: AppBar(
         automaticallyImplyLeading: true, // Automatically imply the leading icon
         title: Text(
-          'Happy New Year',
+          'Happy New Year 2025',
           style: GoogleFonts.poppins(
             textStyle: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
           ),
         ),
         backgroundColor: Colors.blue,
@@ -34,9 +59,10 @@ class NewyearView extends GetView<NewyearController> {
         leading: isTablet
             ? Builder(
                 builder: (context) => IconButton(
-                  icon: const Icon(Icons.menu, color: Colors.white),
+                  icon: const Icon(Icons.menu,
+                      color: Colors.white), // Set color here
                   onPressed: () {
-                    Scaffold.of(context).openDrawer(); // Membuka Drawer
+                    Scaffold.of(context).openDrawer(); // Open the Drawer
                   },
                 ),
               )
@@ -177,17 +203,84 @@ class NewyearView extends GetView<NewyearController> {
                   mainAxisSpacing: 16,
                   childAspectRatio: 3 / 4,
                 ),
-                itemCount: 4,
+                itemCount:
+                    items.length, // Gunakan jumlah item sesuai data produk
                 itemBuilder: (context, index) {
-                  return Card(
-                    elevation: 4,
-                    child: Center(
-                      child: Text('Item ${index + 1}'),
+                  final item =
+                      items[index]; // Mendapatkan item dari list produk
+                  return InkWell(
+                    onTap: () {
+                      // Navigasi ke halaman detail produk
+                      Get.toNamed('/det-home');
+                    },
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 5,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                            ),
+                            child: Image.asset(
+                              item['image'], // Menggunakan gambar produk
+                              fit: BoxFit.cover,
+                              height: 120,
+                              width: double.infinity,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item['brand'],
+                                  style: GoogleFonts.poppins(
+                                    textStyle: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  item['name'],
+                                  style: GoogleFonts.poppins(
+                                    textStyle: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  item['price'],
+                                  style: GoogleFonts.poppins(
+                                    textStyle: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
               ),
-            ),
+            )
           ],
         ),
       ),

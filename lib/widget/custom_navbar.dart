@@ -34,9 +34,9 @@ class CustomNavbar extends StatelessWidget {
         ),
       ],
       type: BottomNavigationBarType.fixed,
-      backgroundColor: Colors.black,
-      selectedItemColor: const Color.fromARGB(255, 255, 255, 255),
-      unselectedItemColor: const Color.fromARGB(255, 125, 125, 125),
+      backgroundColor: Colors.white,
+      selectedItemColor: const Color.fromARGB(255, 35, 142, 89),
+      unselectedItemColor: const Color.fromARGB(255, 70, 70, 70),
       showUnselectedLabels: true,
     );
   }

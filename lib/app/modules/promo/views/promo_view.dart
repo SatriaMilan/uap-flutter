@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:myapp/app/modules/promo/controllers/promo_controller.dart';
 import 'package:myapp/widget/custom_navbar.dart';
 
 class PromoView extends StatefulWidget {
@@ -34,15 +33,32 @@ class _PromoViewState extends State<PromoView> {
 
   @override
   Widget build(BuildContext context) {
-    // Mendapatkan ukuran layar
     final screenWidth = MediaQuery.of(context).size.width;
 
-    // Kondisi untuk tablet (biasanya lebar 600px ke atas dianggap tablet)
+    // Tentukan apakah perangkat adalah tablet
     final isTablet = screenWidth >= 600;
 
+    // Daftar promo yang akan ditampilkan
+    final List<Map<String, dynamic>> promoItems = [
+      {
+        'image': 'assets/images/natal.png', // Gambar promo Natal
+        'name': 'Rayakan Natal Lebih Hangat!',
+        'discount': 'Diskon 30%',
+        'page': '/natal', // Navigasi ke halaman Natal
+      },
+      {
+        'image': 'assets/images/ny.png', // Gambar promo Tahun Baru
+        'name': 'Tahun Baru Penuh Semangat!',
+        'discount': 'Diskon 50%',
+        'page': '/newyear', // Navigasi ke halaman New Year
+      },
+      // Tambahkan promo lain jika diperlukan
+    ];
+
     return Scaffold(
+      backgroundColor: Colors.white, // Set background color to white
       appBar: AppBar(
-        automaticallyImplyLeading: false, // Nonaktifkan ikon panah
+        automaticallyImplyLeading: false,
         title: Text(
           'Promo',
           style: GoogleFonts.poppins(
@@ -61,7 +77,7 @@ class _PromoViewState extends State<PromoView> {
                   },
                 ),
               )
-            : null, // Tidak ada ikon menu pada mobile
+            : null,
       ),
       drawer: isTablet
           ? Drawer(
@@ -98,7 +114,7 @@ class _PromoViewState extends State<PromoView> {
                 ],
               ),
             )
-          : null, // Drawer hanya tampil di tablet
+          : null,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,72 +126,47 @@ class _PromoViewState extends State<PromoView> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
             ),
+            // Tampilkan tombol promo
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
-                children: [
-                  SizedBox(
+                children: promoItems.map((item) {
+                  return SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        Get.toNamed('/natal'); // Arahkan ke halaman Natal
+                        Get.toNamed(item['page']);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
+                        backgroundColor: const Color.fromARGB(255, 124, 116, 44),
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                         alignment: Alignment.centerLeft,
                       ),
-                      child: Text(
-                        'Rayakan Natal Lebih hanggat dengan diskon 30%',
-                        style: GoogleFonts.poppins(
-                          textStyle: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 16),
+                          Text(
+                            item['name'],
+                            style: GoogleFonts.poppins(
+                              textStyle: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Get.toNamed('/newyear'); // Arahkan ke halaman New Year
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        padding: const EdgeInsets.symmetric(vertical: 16.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        alignment: Alignment.centerLeft,
-                      ),
-                      child: Text(
-                        'Tahun Baru Dengan penuh semangat dengan diskon 50%',
-                        style: GoogleFonts.poppins(
-                          textStyle: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                  );
+                }).toList(),
               ),
             ),
             const Padding(
               padding: EdgeInsets.all(16.0),
-              child: Text(
-                'Yang akan Datang',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -188,12 +179,65 @@ class _PromoViewState extends State<PromoView> {
                   mainAxisSpacing: 16,
                   childAspectRatio: 3 / 4,
                 ),
-                itemCount: 4,
+                itemCount: promoItems.length,
                 itemBuilder: (context, index) {
+                  final promo = promoItems[index];
                   return Card(
                     elevation: 4,
-                    child: Center(
-                      child: Text('Item ${index + 1}'),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        Get.toNamed(promo['page']);
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                            ),
+                            child: Image.asset(
+                              promo['image'],
+                              height: 120,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  promo['name'],
+                                  style: GoogleFonts.poppins(
+                                    textStyle: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  promo['discount'],
+                                  style: GoogleFonts.poppins(
+                                    textStyle: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -205,8 +249,8 @@ class _PromoViewState extends State<PromoView> {
       bottomNavigationBar: isTablet
           ? null // Tablet tidak memiliki navbar di bawah
           : CustomNavbar(
-              currentIndex: _currentIndex, // Menggunakan _currentIndex
-              onTap: _onTabTapped, // Memanggil _onTabTapped saat tab dipilih
+              currentIndex: _currentIndex,
+              onTap: _onTabTapped,
             ),
     );
   }
