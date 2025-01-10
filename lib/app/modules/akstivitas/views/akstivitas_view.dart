@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Tambahkan untuk Firestore
 import 'package:myapp/app/modules/akstivitas/controllers/akstivitas_controller.dart';
 import 'package:myapp/widget/custom_navbar.dart';
 
@@ -13,6 +14,7 @@ class AktivitasView extends StatefulWidget {
 
 class _AktivitasViewState extends State<AktivitasView> {
   int _currentIndex = 2; // Indeks default untuk halaman Aktivitas
+  String filterOption = 'Semua Riwayat'; // Pilihan filter default
 
   // Fungsi untuk menangani tab yang dipilih
   void _onTabTapped(int index) {
@@ -32,8 +34,23 @@ class _AktivitasViewState extends State<AktivitasView> {
     }
   }
 
+  // Fungsi untuk memfilter data berdasarkan pilihan
+  void filterTransactions() {
+    final AkstivitasController controller = Get.find<AkstivitasController>();
+
+    if (filterOption == 'Hari Ini') {
+      controller.filterByToday();
+    } else if (filterOption == 'Per Jam') {
+      controller.filterByLastHour();
+    } else {
+      controller.fetchAllTransactions();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final AkstivitasController controller = Get.put(AkstivitasController());
+
     // Mendapatkan ukuran layar
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -99,73 +116,139 @@ class _AktivitasViewState extends State<AktivitasView> {
               ),
             )
           : null, // Drawer hanya tampil di tablet
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Pilih Aktivitas',
-              style: GoogleFonts.poppins(
-                textStyle: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 50,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 5, // Sesuaikan jumlah tombol aktivitas
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Tindakan saat tombol diklik
-                      print('Tombol Aktivitas ${index + 1} diklik');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 227, 227, 227),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    child: Text(
-                      'Aktivitas ${index + 1}',
-                      style: GoogleFonts.poppins(
-                        textStyle: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 16),
-          Expanded(
-            child: Center(
-              child: Text(
-                'Pilih aktivitas untuk memulai.',
-                style: GoogleFonts.poppins(
-                  textStyle: const TextStyle(fontSize: 16),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
       bottomNavigationBar: isTablet
           ? null // Tablet tidak memiliki navbar di bawah
           : CustomNavbar(
               currentIndex: _currentIndex, // Menggunakan _currentIndex
               onTap: _onTabTapped, // Memanggil _onTabTapped saat tab dipilih
             ),
+      body: Container(
+        color: Colors.white,
+        child: Column(
+          children: [
+            // Pilihan filter menggunakan tombol horizontal
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: <String>['Semua Riwayat', 'Hari Ini', 'Per Jam']
+                      .map((option) {
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          filterOption = option;
+                        });
+                        filterTransactions(); // Panggil fungsi filter setelah pilihan berubah
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        margin: const EdgeInsets.only(right: 10),
+                        decoration: BoxDecoration(
+                          color: filterOption == option
+                              ? Colors.green
+                              : Colors.grey[300],
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          option,
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: filterOption == option
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+
+            // Tampilan Transaksi
+            Expanded(
+              child: Obx(() {
+                if (controller.transactions.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'Tidak ada transaksi',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  );
+                }
+
+                return ListView.builder(
+                  padding: const EdgeInsets.all(16.0),
+                  itemCount: controller.transactions.length,
+                  itemBuilder: (context, index) {
+                    final transaction = controller.transactions[index];
+                    return Card(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Transaksi ${transaction['id']}',
+                              style: GoogleFonts.poppins(
+                                textStyle: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Tanggal: ${transaction['timestamp']}',
+                              style: GoogleFonts.poppins(fontSize: 14),
+                            ),
+                            const SizedBox(height: 8),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: List.generate(
+                                  transaction['items'].length, (index) {
+                                final item = transaction['items'][index];
+                                return Text(
+                                  '${item['name']} x ${item['quantity']} - Rp${item['total']}',
+                                  style: GoogleFonts.poppins(fontSize: 14),
+                                );
+                              }),
+                            ),
+                            const Divider(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Total Pembayaran',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  'Rp${transaction['totalPayment']}',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

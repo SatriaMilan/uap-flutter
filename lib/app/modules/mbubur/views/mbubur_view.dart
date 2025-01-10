@@ -10,39 +10,39 @@ class MbuburView extends StatelessWidget {
     // Daftar data dinamis untuk GridView
     final List<Map<String, dynamic>> items = [
       {
-        'image': 'assets/images/produk.png', // Local image path
+        'image': 'assets/images/produk.png',
         'brand': 'Brand A',
-        'name': 'Red Shirt',
+        'name': 'Super Bubur Buryam',
         'price': '\$25',
       },
       {
-        'image': 'assets/images/produk.png', // Local image path
+        'image': 'assets/images/produk.png',
         'brand': 'Brand B',
-        'name': 'Green Blouse',
+        'name': 'Super Bubur kacang ijo',
         'price': '\$30',
       },
       {
-        'image': 'assets/images/produk.png', // Local image path
+        'image': 'assets/images/produk.png',
         'brand': 'Brand C',
-        'name': 'Blue Jacket',
+        'name': 'bubur',
         'price': '\$50',
       },
       {
-        'image': 'assets/images/produk.png', // Local image path
+        'image': 'assets/images/produk.png',
         'brand': 'Brand D',
-        'name': 'Yellow Skirt',
+        'name': 'bubur',
         'price': '\$40',
       },
       {
-        'image': 'assets/images/produk.png', // Local image path
+        'image': 'assets/images/produk.png',
         'brand': 'Brand E',
-        'name': 'Purple Pants',
+        'name': 'bubur',
         'price': '\$35',
       },
       {
-        'image': 'assets/images/produk.png', // Local image path
+        'image': 'assets/images/produk.png',
         'brand': 'Brand F',
-        'name': 'Cyan T-Shirt',
+        'name': 'bubur',
         'price': '\$20',
       },
       // Tambahkan item lainnya jika diperlukan

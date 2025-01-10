@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/app/modules/auth/controllers/auth_controller.dart';
 import 'package:myapp/app/modules/profile/controllers/profile_controller.dart';
 import 'package:myapp/widget/custom_navbar.dart';
 
@@ -31,6 +32,8 @@ class _ProfileViewState extends State<ProfileView> {
       Get.toNamed('/profile');
     }
   }
+
+  final AuthController authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +102,8 @@ class _ProfileViewState extends State<ProfileView> {
               ),
             )
           : null,
+      backgroundColor: const Color.fromARGB(
+          255, 255, 255, 255), // Tambahkan ini untuk latar belakang putih
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -113,7 +118,7 @@ class _ProfileViewState extends State<ProfileView> {
               const SizedBox(height: 16),
               // Nama pengguna
               Text(
-                'Nama Pengguna',
+                'Satria Milan',
                 style: GoogleFonts.poppins(
                   textStyle: const TextStyle(
                     fontSize: 20,
@@ -124,7 +129,7 @@ class _ProfileViewState extends State<ProfileView> {
               const SizedBox(height: 8),
               // Email pengguna
               Text(
-                'email@example.com',
+                'satria@gmail.com',
                 style: GoogleFonts.poppins(
                   textStyle: const TextStyle(
                     fontSize: 14,
@@ -167,7 +172,7 @@ class _ProfileViewState extends State<ProfileView> {
               // Tombol logout
               ElevatedButton(
                 onPressed: () {
-                  Get.find<ProfileController>().logout();
+                  authController.logout();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,

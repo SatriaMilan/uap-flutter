@@ -9,6 +9,8 @@ class PaymentView extends GetView<PaymentController> {
 
   @override
   Widget build(BuildContext context) {
+    final PaymentController controller = Get.put(PaymentController());
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -34,7 +36,7 @@ class PaymentView extends GetView<PaymentController> {
                 ),
               ),
               subtitle: Text(
-                'Kos - Satria Milan W\nJl. Tlogo Al-Kautsar No.99, Tlogomas, Kec. Lowokwaru',
+                'Satria Milan W\nJl. Tlogo Al-Kautsar No.99, Tlogomas, Kec. Lowokwaru',
                 style: GoogleFonts.poppins(fontSize: 14),
               ),
               trailing: Icon(Icons.arrow_forward_ios, size: 16),
@@ -94,72 +96,77 @@ class PaymentView extends GetView<PaymentController> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Total Harga (1 Barang)',
-                        style: GoogleFonts.poppins(fontSize: 14)),
-                    Text('Rp25.000', style: GoogleFonts.poppins(fontSize: 14)),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Biaya Layanan',
-                        style: GoogleFonts.poppins(fontSize: 14)),
-                    Text('Rp1.000', style: GoogleFonts.poppins(fontSize: 14)),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Biaya Aplikasi (Diskon)',
-                        style: GoogleFonts.poppins(fontSize: 14)),
-                    Text('Rp0', style: GoogleFonts.poppins(fontSize: 14)),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Total Pembayaran',
-                      style: GoogleFonts.poppins(
-                        textStyle: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                Obx(() {
+                  return Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Total Harga (1 Barang)',
+                              style: GoogleFonts.poppins(fontSize: 14)),
+                          Text(
+                            'Rp${controller.totalPayment.toStringAsFixed(0)}',
+                            style: GoogleFonts.poppins(fontSize: 14),
+                          ),
+                        ],
                       ),
-                    ),
-                    Text(
-                      'Rp30.800',
-                      style: GoogleFonts.poppins(
-                        textStyle: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Biaya Aplikasi (Diskon)',
+                              style: GoogleFonts.poppins(fontSize: 14)),
+                          Text('Rp0', style: GoogleFonts.poppins(fontSize: 14)),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Total Pembayaran',
+                            style: GoogleFonts.poppins(
+                              textStyle: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Text(
+                            'Rp${(controller.totalPayment.value + 1000).toStringAsFixed(0)}',
+                            style: GoogleFonts.poppins(
+                              textStyle: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                }),
               ],
             ),
 
             const SizedBox(height: 16),
 
             // Pay Button
-            ElevatedButton(
-              onPressed: () {
-                Get.toNamed('/akstivitas');
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-              ),
-              child: Text(
-                'Bayar Sekarang',
-                style: GoogleFonts.poppins(
-                  textStyle: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
+            Obx(() {
+              return ElevatedButton(
+                onPressed: controller.totalPayment.value > 0
+                    ? () {
+                        controller.processPayment();
+                      }
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-              ),
-            ),
+                child: Text(
+                  'Bayar Sekarang',
+                  style: GoogleFonts.poppins(
+                    textStyle: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              );
+            }),
           ],
         ),
       ),

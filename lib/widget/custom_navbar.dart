@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CustomNavbar extends StatelessWidget {
   final int currentIndex;
@@ -14,7 +15,12 @@ class CustomNavbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       currentIndex: currentIndex,
-      onTap: onTap,
+      onTap: (index) {
+        print("Tapped index: $index");
+        print("CustomNavbar: currentIndex = $currentIndex");
+
+        onTap(index);
+      },
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),

@@ -55,6 +55,30 @@ class _PromoViewState extends State<PromoView> {
       // Tambahkan promo lain jika diperlukan
     ];
 
+    // Tambahkan elemen tambahan
+    final List<Map<String, dynamic>> additionalItems = [
+      {
+        'title': 'Tips Belanja Hemat',
+        'description':
+            'Pelajari cara mendapatkan promo terbaik di aplikasi kami!',
+        'icon': Icons.lightbulb,
+        'page': '/tips', // Navigasi ke halaman tips
+      },
+      {
+        'title': 'Produk Unggulan',
+        'description':
+            'Jelajahi produk-produk pilihan dengan penawaran menarik.',
+        'icon': Icons.star,
+        'page': '/featured', // Navigasi ke halaman produk unggulan
+      },
+      {
+        'title': 'Testimoni Pelanggan',
+        'description': 'Simak pengalaman pelanggan kami yang puas.',
+        'icon': Icons.chat,
+        'page': '/testimonials', // Navigasi ke halaman testimoni
+      },
+    ];
+
     return Scaffold(
       backgroundColor: Colors.white, // Set background color to white
       appBar: AppBar(
@@ -138,7 +162,8 @@ class _PromoViewState extends State<PromoView> {
                         Get.toNamed(item['page']);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 124, 116, 44),
+                        backgroundColor:
+                            const Color.fromARGB(255, 142, 168, 25),
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -243,15 +268,56 @@ class _PromoViewState extends State<PromoView> {
                 },
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
+                    child: Text(
+                      'Informasi Lainnya',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  ...additionalItems.map((item) {
+                    return ListTile(
+                      leading: Icon(item['icon'], color: Colors.blue),
+                      title: Text(
+                        item['title'],
+                        style: GoogleFonts.poppins(
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      subtitle: Text(
+                        item['description'],
+                        style: GoogleFonts.poppins(
+                          textStyle: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        Get.toNamed(item['page']);
+                      },
+                    );
+                  }).toList(),
+                ],
+              ),
+            ),
           ],
         ),
       ),
-      bottomNavigationBar: isTablet
-          ? null // Tablet tidak memiliki navbar di bawah
-          : CustomNavbar(
-              currentIndex: _currentIndex,
-              onTap: _onTabTapped,
-            ),
+      bottomNavigationBar: CustomNavbar(
+        currentIndex: _currentIndex,
+        onTap: _onTabTapped,
+      ),
     );
   }
 }

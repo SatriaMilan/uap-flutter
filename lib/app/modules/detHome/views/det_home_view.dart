@@ -9,6 +9,12 @@ class DetHomeView extends GetView<DetHomeController> {
 
   @override
   Widget build(BuildContext context) {
+    // Dummy data untuk produk
+    const productId = '12345';
+    const productName = 'Super Bubur Buryam';
+    const productPrice = 11800; // Harga produk
+    const productQuantity = 1;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -58,7 +64,7 @@ class DetHomeView extends GetView<DetHomeController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Super Bubur Buryam',
+                          productName,
                           style: GoogleFonts.poppins(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
@@ -67,7 +73,7 @@ class DetHomeView extends GetView<DetHomeController> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          '10 Pcs @ 22 Gr',
+                          '1 porsi @ 22 Gr',
                           style: GoogleFonts.poppins(
                             fontSize: 14,
                             color: Colors.grey[700],
@@ -101,7 +107,7 @@ class DetHomeView extends GetView<DetHomeController> {
               Row(
                 children: [
                   Text(
-                    'Rp11.800',
+                    'Rp$productPrice',
                     style: GoogleFonts.poppins(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -143,7 +149,12 @@ class DetHomeView extends GetView<DetHomeController> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        Get.toNamed('/keranjang');
+                        controller.addToCart(
+                          productId,
+                          productName,
+                          productQuantity,
+                          productPrice,
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
@@ -173,7 +184,12 @@ class DetHomeView extends GetView<DetHomeController> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        Get.toNamed('/payment');
+                        controller.buyNow(
+                          productId,
+                          productName,
+                          productQuantity,
+                          productPrice,
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
@@ -221,115 +237,9 @@ class DetHomeView extends GetView<DetHomeController> {
                 ),
               ),
               const SizedBox(height: 24),
-
-              // Customer Reviews Section
-              Text(
-                'Customer Reviews:',
-                style: GoogleFonts.poppins(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Icon(Icons.star, color: Colors.yellow[700], size: 18),
-                  const SizedBox(width: 4),
-                  Text(
-                    '4.9 (1.3k Reviews)',
-                    style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      color: Colors.grey[700],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Text(
-                '"This product is amazing! It tastes great, and the quality is top-notch!" - Customer A',
-                style: GoogleFonts.poppins(
-                  fontSize: 14,
-                  color: Colors.grey[600],
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                '"I love it! Definitely buying again." - Customer B',
-                style: GoogleFonts.poppins(
-                  fontSize: 14,
-                  color: Colors.grey[600],
-                ),
-              ),
-              const SizedBox(height: 24),
-
-              // Related Products Section
-              Text(
-                'Related Products:',
-                style: GoogleFonts.poppins(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 8),
-              // Display related products here (use a horizontal list view)
-              Container(
-                height: 160,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    _buildRelatedProductCard('assets/images/produk2.png',
-                        'Super Bubur Buryam 20 Gr', 'Rp15.000'),
-                    _buildRelatedProductCard('assets/images/produk3.png',
-                        'Super Bubur Buryam 50 Gr', 'Rp25.000'),
-                    _buildRelatedProductCard('assets/images/produk4.png',
-                        'Super Bubur Buryam 100 Gr', 'Rp35.000'),
-                  ],
-                ),
-              ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  // Helper method to build related product cards
-  Widget _buildRelatedProductCard(
-      String imagePath, String title, String price) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.asset(
-              imagePath,
-              width: 120,
-              height: 120,
-              fit: BoxFit.cover,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            style: GoogleFonts.poppins(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            price,
-            style: GoogleFonts.poppins(
-              fontSize: 14,
-              color: Colors.green,
-            ),
-          ),
-        ],
       ),
     );
   }

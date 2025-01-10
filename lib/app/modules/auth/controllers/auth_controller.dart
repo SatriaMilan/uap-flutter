@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/app/modules/auth/views/auth_view.dart';
+import 'package:myapp/app/routes/app_pages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthController extends GetxController {
@@ -67,6 +68,6 @@ class AuthController extends GetxController {
     _prefs.remove('user_token');
     isLoggedIn.value = false;
     _auth.signOut();
-    Get.offAllNamed('/login');
+    Get.offAllNamed(Routes.AUTH);
   }
 }
